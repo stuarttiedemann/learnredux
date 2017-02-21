@@ -20,14 +20,33 @@ var reducer = (state = stateDefault, action) => {
   }
 };
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+
+// Subscribe to changes
+store.subscribe( () => {
+  var state = store.getState();
+
+  console.log('searchText is ', state.searchText);
+  document.getElementById('app').innerHTML = state.searchText;
+});
 
 console.log('currentState', store.getState());
 
 store.dispatch({
   type:'CHANGE_SEARCH_TEXT',
-  searchText: 'sometext'
+  searchText: 'It has rained all day today'
 });
 
-console.log('searchText should be sometext', store.getState());
+store.dispatch({
+  type:'CHANGE_SEARCH_TEXT',
+  searchText: 'Learning React is not the easiest thing I have done'
+});
+
+store.dispatch({
+  type:'CHANGE_SEARCH_TEXT',
+  searchText: 'March 30 is our anniversary'
+});
+
+
 

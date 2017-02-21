@@ -44,6 +44,7 @@ var unsubscribe = store.subscribe(() => {
   var state = store.getState();
 
   console.log('name is', state.name);
+  document.getElementById('app').innerHTML = state.name;
 });
 // unsubscribe();
 
