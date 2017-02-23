@@ -23,7 +23,16 @@ console.log('Starting redux');
 // console.log(startingValue);
 // console.log(res);
 
-var reducer = (state = {name: 'Anonymous'}, action) => {
+var stateDefault = {
+  name: 'Anonymous',
+  hobbies: [],
+  movies: []
+};
+
+var nextHobbyId = 1;
+var nextMovieId = 1;
+
+var reducer = (state = stateDefault, action) => {
     // state = state || {name: 'Anonymous'};
 
     switch (action.type) {
@@ -31,6 +40,39 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
         return {
           ...state,
           name: action.name
+        };
+      case 'ADD_HOBBY':
+        return {
+          ...state,
+          hobbies: [
+            ...state.hobbies,
+            {
+              id: nextHobbyId++,
+              hobby: action.hobby
+            }
+          ]
+        };
+      case 'REMOVE_HOBBY':
+        return {
+          ...state,
+          hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id)
+        };
+      case 'ADD_MOVIE':
+        return {
+          ...state,
+          movies: [ 
+            ...state.movies,
+            {
+              id:nextMovieId++,
+              title: action.title,
+              genre: action.genre
+            }
+          ]
+        };
+      case 'REMOVE_MOVIE':
+        return {
+          ...state,
+          movies: state.movies.filter((movie) => movie.id !== action.id)
         };
       default:
         return state;
@@ -45,6 +87,8 @@ var unsubscribe = store.subscribe(() => {
 
   console.log('name is', state.name);
   document.getElementById('app').innerHTML = state.name;
+
+  console.log('new state', store.getState());
 });
 // unsubscribe();
 
@@ -56,11 +100,41 @@ store.dispatch({
   name: 'Stuart'
 });
 
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'Running'
+});
 
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'Walking'
+});
+
+store.dispatch({
+  type: 'REMOVE_HOBBY',
+  id: 2
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  title: 'The Big Short',
+  genre: 'Documentary'
+});
 
 store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Liz'
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  title: 'X-Men',
+  genre: 'Action'
+});
+
+store.dispatch({
+  type: 'REMOVE_MOVIE',
+  id: 1
 });
 
 
